@@ -1,0 +1,79 @@
+class Book:
+    def __init__(self, T, A, I, Av=True):
+        self.__Title = T
+        self.__Author = A
+        self.__Isbn = I
+        self.__Available = Av
+
+    def Display(self):
+        print("The title of the book: ", self.__Title)
+        print("The author of the book: ", self.__Author)
+        print("The ISBN of the book: ", self.__Isbn)
+        print("Is the book available : ", "Yes" if self.__Available else "No")
+
+    def Available(self):
+        return self.__Available
+
+    def SetAvailability(self, status):
+        self.__Available = status
+
+    def GetIsbn(self):
+        return self.__Isbn
+
+
+class Library:  # this is not a subclass rather a super class hence why book is not here
+    def __init__(self):
+        self.books = []
+
+    def AddBook(self, book):
+        self.books.append(book)  # store the Book object in the list
+        print("Book added to the library")
+
+    def IssueBook(self, isbn):
+        for book in self.books:
+            if book.GetIsbn() == isbn:
+                if book.Available():
+                    book.SetAvailability(False)
+                    print("Book issued successfully.")
+                else:
+                    print("Book is already issued.")
+                return
+        print("Book not found.")
+
+    def ReturnBook(self, isbn):
+        for book in self.books:
+            if book.GetIsbn() == isbn:
+                if not book.Available():
+                    book.SetAvailability(True)
+                    print("Book returned successfully.")
+                else:
+                    print("Book was not issued.")
+                return
+        print("Book not found.")
+
+    def DisplayBooks(self):
+        if not self.books:  # check if the list is empty
+            print("No books in the library.")
+        else:
+            for book in self.books:  # loop through the list
+                book.Display()  # call each Book's Display() method
+
+
+b1 = Book("1984", "George Orwell", "12345", True)
+b2 = Book("To Kill a Mockingbird", "Harper Lee", "54321", True)
+
+# Create library
+lib = Library()
+
+# Add books
+lib.AddBook(b1)
+lib.AddBook(b2)
+
+# Show all books
+lib.DisplayBooks()
+
+# Issue and return
+lib.IssueBook("12345")
+lib.DisplayBooks()
+lib.ReturnBook("12345")
+lib.DisplayBooks()
